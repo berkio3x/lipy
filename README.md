@@ -21,3 +21,20 @@ An interpreter for lisp/scheme dialect of programming
           (+ (sin x)  (cos y))
           (* x y)))
   ```
+
+### variable assignment.
+## set!
+```lisp
+  ( begin
+        (define x 10)
+        (set! x (+ x 10))
+        (* x 2))
+```
+#### Procedures.
+## lambda
+```lisp
+    (begin 
+        (define amount (lambda (r) (* 2 (* r r))))
+        (amount 20)
+    )
+```
