@@ -58,3 +58,10 @@ sys     0m0.014s
         (amount 20)
     )
 ```
+
+
+#### Running the interpreter.
+`python3.10 main.py examples/factorial.prog`
+### NOTE:
+  - To run with debug info , use `--loglevel debug` flag
+  
