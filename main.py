@@ -130,8 +130,6 @@ def eval_exp_tree(exp, env=global_env):
     if options.showenv:
         logger.debug(f'Evaluating expression with env: {pformat(env)}') 
     match exp:
-        case str(exp):
-            return env.find_ref(exp)[exp]
         
         case int(exp):
             return exp 
@@ -154,6 +152,9 @@ def eval_exp_tree(exp, env=global_env):
         case ['define', _, _]:
             (_, symbol, expression) = exp
             env[symbol] = eval_exp_tree(expression, env)
+        
+        case str(exp):
+            return env.find_ref(exp)[exp]
         
         case _ if exp:
             proc = eval_exp_tree(exp[0], env)
