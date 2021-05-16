@@ -1,5 +1,16 @@
 # lipy
 An interpreter for lisp/scheme dialect of programming
+```
+                                 .-'~~~-.
+                               .'o  oOOOo`.
+                              :~~~-.oOo   o`.
+                               `. \ ~-.  oOOo.
+                                 `.; / ~.  OO:
+                                 .'  ;-- `.o.'
+                                ,'  ; ~~--'~
+                                ;  ;
+          _______\|/__________\\;_\\//___\|/________
+```
 
 #### A simple program using variable assignment/conditional execution/inbuilt available math funcitons
 ```lisp
