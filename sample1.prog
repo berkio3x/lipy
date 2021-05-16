@@ -1,0 +1,6 @@
+        (begin 
+            (define x 10) 
+            (define y 20)
+            (if (< x y)
+                (+ (sin x)  (cos y))
+                (* x y)))
