@@ -19,7 +19,10 @@ parser.add_option("-e", "--showenv",
                   )
 (options, args) = parser.parse_args()
 
-logging.basicConfig()
+logging.basicConfig(format='[Line: %(lineno)d] %(message)s \n',
+                    datefmt='%Y-%m-%d:%H:%M:%S')
+
+
 logger = logging.getLogger(__name__)
 if options.loglevel == "debug":
         options.loglevel = logging.DEBUG
@@ -83,9 +86,9 @@ def std_env():
     env = Environment()
     env.update(vars(math))
     env.update({
-        '+': OP.add    ,
+        '+': lambda *args: reduce(OP.add, args) ,
         '-': OP.sub    ,
-        '*': OP.mul    ,
+        '*': OP.mul,#lambda *args: reduce(OP.mul,)
         '/': OP.truediv,
         '<': OP.lt     ,
         '>': OP.gt     ,
@@ -107,6 +110,7 @@ def std_env():
         'length': len,
         'equal?': OP.eq,
         'begin': lambda *x: x[-1],
+        'print': print
         
         })
     return env
@@ -125,7 +129,7 @@ def atom(token):
 global_env = std_env()
 
 def eval_exp_tree(exp, env=global_env):
-    logger.debug(exp)
+    logger.debug(pformat(exp))
    
     if options.showenv:
         logger.debug(f'Evaluating expression with env: {pformat(env)}') 
@@ -170,8 +174,8 @@ def execute_program(source, file=True):
         source = read_source(prog_file)
     parsed = parse(tokenize(source))
     logger.debug('Parsed ast:')
-    logger.debug(parsed)
-    logger.debug('Evaluation steps')
+    logger.debug(pformat(parsed))
+    logger.debug('\n\n\nEvaluation steps\n\n\n')
     result = eval_exp_tree(parsed)
     return result
 
