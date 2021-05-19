@@ -75,12 +75,20 @@ class Procedure:
         self.body = body
         self.env = env
     def __call__(self, *args):
-        return eval_exp_tree(self.body, Environment(
-            params=self.params, 
-            args=args, 
-            enclosing=self.env
-            )
-        )
+        e = Environment(
+            params=self.params,
+            args=args,
+            enclosing=self.env)
+        
+        for index, body in enumerate(self.body):
+            res = eval_exp_tree(body, e)
+            if index == len(self.body) - 1:
+                return res
+            
+    
+    
+def set_break():
+    import pdb;pdb.set_trace()
 
 def std_env():
     env = Environment()
@@ -110,7 +118,7 @@ def std_env():
         'length': len,
         'equal?': OP.eq,
         'begin': lambda *x: x[-1],
-        'print': print
+        'print': print,
         
         })
     return env
@@ -145,7 +153,7 @@ def eval_exp_tree(exp, env=global_env):
             val = eval_exp_tree(expression, env)
             env.find_ref(symbol)[symbol] = val
             
-        case ['lambda', args, body]:
+        case ['lambda', args, *body]:
             return Procedure(args, body,  env)
             
         case ['if', _, _, _]:
@@ -163,6 +171,7 @@ def eval_exp_tree(exp, env=global_env):
         case _ if exp:
             proc = eval_exp_tree(exp[0], env)
             args = [eval_exp_tree(arg, env) for arg in exp[1:]]
+            #print(proc, args)
             return proc(*args)
     
 def read_source(source):
