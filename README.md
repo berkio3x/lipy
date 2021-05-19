@@ -1,5 +1,7 @@
 # lipy
-An interpreter for lisp/scheme dialect of programming
+An interpreter for lisp/scheme dialect of programming.
+
+[Example programs!](https://github.com/berkio3x/lipy/tree/main/examples)
 ```
                                  .-'~~~-.
                                .'o  oOOOo`.
