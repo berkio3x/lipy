@@ -96,7 +96,7 @@ def std_env():
     env.update({
         '+': lambda *args: reduce(OP.add, args) ,
         '-': OP.sub    ,
-        '*': OP.mul,#lambda *args: reduce(OP.mul,)
+        '*': lambda *args: reduce(OP.mul, args),
         '/': OP.truediv,
         '<': OP.lt     ,
         '>': OP.gt     ,
