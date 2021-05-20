@@ -188,8 +188,25 @@ def execute_program(source, file=True):
     result = eval_exp_tree(parsed)
     return result
 
+
+def repl():
+    while True:
+        expr = input(">>>")
+        if expr == "(exit)": break 
+        if expr.strip() == "": continue
+        try:
+            res = execute_program(expr, file=False)
+            print(res)
+        except Exception as e:
+            print(str(e))
+        
+
+    
+    
+    
 if __name__ == "__main__":
-    prog_file = sys.argv[1]
-    result = execute_program(prog_file)
-    print(result)
+    repl()
+    #prog_file = sys.argv[1]
+    #result = execute_program(prog_file)
+    #print(result)
     
