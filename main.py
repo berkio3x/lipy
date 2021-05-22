@@ -5,6 +5,7 @@ from pprint import pformat
 import math
 import operator as OP
 from functools import reduce
+from typing import List
 
 parser = OptionParser()
 
@@ -30,11 +31,96 @@ if options.loglevel == "debug":
 logger.setLevel(options.loglevel)
 
 
-def tokenize(source):
-    tokens = source.replace(')' ,' ) ').replace('(',' ( ').split()
-    logger.debug(pformat(tokens))
-    return tokens
+def isnum(num):
+    try:
+        int(num)
+    except ValueError:
+        try:
+            float(num)
+        except ValueError:
+            return False
+    return True 
+
+
+class Tokenizer:
+
+    def __init__(self, source):
+        self.source = source
+        self.c = 0
+        self.start = 0
+        self.operators = ('+' ,'-', '*', '/')
+        self.tokens = []
     
+    def error(self, ch):
+        raise SyntaxError(f'Unrecognized token: {ch}')
+        
+    def next(self) -> str:
+        self.c += 1
+        return self.source[self.c - 1]
+
+    def peek(self) -> str:
+        return self.source[self.c]
+
+    def tokenize(self) -> List:
+        tokens = self.scan_tokens()
+        return self.tokens
+    
+    def end_of_source(self) -> bool:
+        return self.c >= len(self.source)
+
+    def read_token(self) -> List:
+        #import pdb;pdb.set_trace()
+        ch = self.next()
+        #print(ch)
+
+        if ch == "=":
+            tokens.append(ch)
+        
+        elif ch == "(" or ch == ")":
+            self.tokens.append(ch)
+            
+        elif ch == ">":
+            if self.peek() == '=':
+                self.tokens.append('>=')
+                self.next()
+            else:
+                self.tokens.append('>')
+            
+        elif ch == "<":
+            if self.peek() == '=':
+                self.tokens.append('<=')
+                self.next()
+            else:
+                self.tokens.append('<')
+
+        elif ch == ";":
+            while self.peek() and self.peek() != '\n':
+                self.next()
+                
+        elif isnum(ch):
+            while self.peek() and isnum(self.peek()):
+                self.next()
+            num = self.source[self.start: self.c]
+            self.tokens.append(num)
+            
+        elif ch.isalpha():
+            while self.peek().isalpha() or self.peek() == '-' or self.peek() == '!':
+                self.next()
+            _token = self.source[self.start: self.c]
+            self.tokens.append(_token)
+            
+        elif ch in self.operators:
+            self.tokens.append(ch)
+        elif ch == ' ':
+            pass
+        else:
+            self.error(ch)
+    
+    def scan_tokens(self):
+        while not self.end_of_source():
+            self.start = self.c
+            self.read_token()
+
 def parse(tokens):
     if not tokens:
         print('No input source')
@@ -181,7 +267,9 @@ def read_source(source):
 def execute_program(source, file=True):
     if file:
         source = read_source(prog_file)
-    parsed = parse(tokenize(source))
+    t = Tokenizer(source)
+    tokens  = t.tokenize()
+    parsed = parse(tokens)
     logger.debug('Parsed ast:')
     logger.debug(pformat(parsed))
     logger.debug('\n\n\nEvaluation steps\n\n\n')
