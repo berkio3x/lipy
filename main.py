@@ -253,6 +253,8 @@ def std_env():
         'begin': lambda *x: x[-1],
         'print': custom_print, 
         'string?': lambda x: python_bool_to_lisp_bool(isinstance(x, str)),
+        'string-len': lambda s: len(s)-2,
+        'string-ref': lambda s,k: s[k+1],
         
         })
     return env
@@ -291,6 +293,7 @@ def eval_exp_tree(exp, env=global_env):
 
         case str(exp):
             return exp
+        
         case int(exp):
             logger.debug('int evaluation')
             return exp 

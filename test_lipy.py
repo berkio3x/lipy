@@ -1,5 +1,5 @@
 from main import execute_program
-
+from utils import colors
 
 progs =[
    
@@ -19,6 +19,9 @@ progs =[
     ('''(print "hello")''','"hello"'),
     ('''(string? "hello world")''','#t'),
     ('''(string? 10)''','#f'),
+    ('''(string-len "Hello World")''',11),
+    ('''(string-ref "Hello World" 4)''','o'),
+    #('''(begin (define name "Nemo" 4) (string-set! name 0 "L" ) (print name))''','Lemo'),
     
     #Lists
     #('''(cons 1 2)''', [1,2]),
@@ -40,5 +43,8 @@ if __name__ == "__main__":
     for prog in progs:
         source, output = prog
         out = execute_program(source, file=False)
-        assert out == output
-        print(f'Test: {source} => {out}','......OK')
+        try:
+            assert out == output
+            print(f'Test: {source} => {out},{colors.OKGREEN}......OK {colors.ENDC}')
+        except AssertionError:
+            print(f'Expected: {output}, got: {colors.FAIL} {out} {colors.ENDC}')
