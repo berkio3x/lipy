@@ -252,7 +252,7 @@ def std_env():
         'equal?': OP.eq,
         'begin': lambda *x: x[-1],
         'print': custom_print, 
-        'string?': lambda x: python_bool_to_lisp_bool((x, str)),
+        'string?': lambda x: python_bool_to_lisp_bool(isinstance(x, str)),
         
         })
     return env
@@ -362,11 +362,7 @@ def repl():
         
     
 if __name__ == "__main__":
-    repl()
     prog_file = sys.argv[1]
     result = execute_program(prog_file)
     print(result)
     
-    #S = '''(begin ( define x 20 ) (if (> x 30) (set! x (+ 4 8)) (set! x 10))'''
-    #t = Tokenizer(s)
-    #Print(t.tokenize())

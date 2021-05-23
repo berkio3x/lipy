@@ -16,7 +16,9 @@ progs =[
     # String 
     
     ('''(print "hello")''','"hello"'),
-    ('''(print "hello world")''','"hello world"'),
+    ('''(print "hello")''','"hello"'),
+    ('''(string? "hello world")''','#t'),
+    ('''(string? 10)''','#f'),
     
     #Lists
     #('''(cons 1 2)''', [1,2]),
