@@ -43,9 +43,15 @@ def isnum(num):
 
 
 
-class Symbol(str):
+class Symbol:
+    def __init__(self, symbol):
+        self.symbol = symbol
+        
+    def __call__(self):
+        return self
+    
     def __repr__(self):
-        return f'<symbol {self}>'
+        return f'<Symbol: {self.symbol}>'
     
 
 _symbols = ('set!', 'define' ,'quote', 'if' , 'else' ,'begin', 'lambda' )
@@ -93,7 +99,7 @@ class Tokenizer:
         ch = self.next()
         #print(ch)
 
-        if ch == "=":
+        if ch == "=":nn
             tokens.append(ch)
         
         elif ch == "(" or ch == ")":
@@ -126,10 +132,10 @@ class Tokenizer:
         elif ch == '"':
             while self.peek() and self.peek() != '"':
                 self.next()
+            _token = self.source[self.start: self.c]
             # consume the last "
             self.next()
-            _token = self.source[self.start: self.c]
-            self.tokens.append('"'+_token+'"')
+            self.tokens.append(_token)
             
         elif ch.isalpha():
             while ( self.peek().isalpha()  
@@ -219,10 +225,7 @@ def lisp_bool_to_python_bool(value):
     if value == '#f':
         return False
     
-def custom_print(x):
-    print(x)
-    return x
-
+    
 def std_env():
     env = Environment()
     env.update(vars(math))
@@ -251,7 +254,7 @@ def std_env():
         'length': len,
         'equal?': OP.eq,
         'begin': lambda *x: x[-1],
-        'print': custom_print, 
+        'print': print,
         'string?': lambda x: python_bool_to_lisp_bool((x, str)),
         
         })
@@ -280,53 +283,34 @@ def eval_exp_tree(exp, env=global_env):
     if options.showenv:
         logger.debug(f'Evaluating expression with env: {pformat(env)}')
 
-    #import pdb;pdb.set_trace();
-
     match exp:
         
-        case Symbol(exp):
-            logger.debug('variable refrencing')
-            logger.debug(pformat(exp))
-            return env.find_ref(exp)[exp]
-
-        case str(exp):
-            return exp
         case int(exp):
-            logger.debug('int evaluation')
             return exp 
         
-        case [Symbol('quote'), args]:
+        case [_quote, args]:
             return args[0]
         
-        case [Symbol('set!'), symbol, expression]:
-            
-            logger.debug('<set! expression')
-            logger.debug(symbol, expression)
-
+        case [_set, symbol, expression]:
             val = eval_exp_tree(expression, env)
             env.find_ref(symbol)[symbol] = val
             
-        case [Symbol('lambda') , args, *body]:
-            logger.debug('<lmbda procedure>')
-            logger.debug(args, body)
-            
+        case [_lambda , args, *body]:
             return Procedure(args, body,  env)
             
-        case [Symbol('if'), test, result, alt]:
-            logger.debug('<if condition evaluation>')
-            logger.debug((test, result, alt))
-            
+        case [_if , _, _, _]:
+            (_, test, result, alt) = exp
             exp = (result if eval_exp_tree(test, env) else alt)
             return eval_exp_tree(exp, env)
         
-        case [Symbol('define'), symbol, expression]:
-            logger.debug('<define variable>')
-            logger.debug(symbol, expression)
+        case [_define, _, _]:
+            (_, symbol, expression) = exp
             env[symbol] = eval_exp_tree(expression, env)
         
+        case Symbol(exp):
+            return env.find_ref(exp)[exp]
         
         case _ if exp:
-            logger.debug('<procedure call>')
             proc = eval_exp_tree(exp[0], env)
             args = [eval_exp_tree(arg, env) for arg in exp[1:]]
             #print(proc, args)
@@ -360,6 +344,9 @@ def repl():
         except Exception as e:
             print(str(e))
         
+
+    
+    
     
 if __name__ == "__main__":
     repl()
