@@ -1,1 +1,0 @@
-python3.10 main.py binary_search.lisp --loglevel debug
