@@ -35,7 +35,7 @@ progs =[
 
     # Procedures
     ('''((lambda (x) (+ x x)) 10)''',20),
-    ('''(begin (define amount (lambda (r) (* 2 (* r r)))) (amount 20))''',800)
+    ('''(begin (define amount (lambda (r) (* 2 (* r r)))) (amount 20))''',800),
 ]
     
     
@@ -45,6 +45,6 @@ if __name__ == "__main__":
         out = execute_program(source, file=False)
         try:
             assert out == output
-            print(f'Test: {source} => {out},{colors.OKGREEN}......OK {colors.ENDC}')
+            print(f'{colors.OKCYAN}Test:{colors.ENDC} {source} => {out},{colors.OKGREEN}......OK {colors.ENDC}')
         except AssertionError:
             print(f'Expected: {output}, got: {colors.FAIL} {out} {colors.ENDC}')
