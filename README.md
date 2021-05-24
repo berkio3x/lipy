@@ -1,18 +1,9 @@
 # lipy
 An interpreter for lisp/scheme dialect of programming.
 
+![demo image](https://github.com/berkio3x/lipy/blob/main/assets/demo.png)
+
 [Example programs!](https://github.com/berkio3x/lipy/tree/main/examples)
-```
-                                 .-'~~~-.
-                               .'o  oOOOo`.
-                              :~~~-.oOo   o`.
-                               `. \ ~-.  oOOo.
-                                 `.; / ~.  OO:
-                                 .'  ;-- `.o.'
-                                ,'  ; ~~--'~
-                                ;  ;
-          _______\|/__________\\;_\\//___\|/________
-```
 
 #### A simple program using variable assignment/conditional execution/inbuilt available math funcitons
 ```lisp
