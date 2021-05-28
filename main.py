@@ -142,7 +142,7 @@ class Tokenizer:
             
         elif ch in self.operators:
             self.tokens.append(ch)
-        elif ch == ' ' or ch == '\n':
+        elif ch == ' ' or ch == '\n' or ch == '\t':
             pass
         else:
             self.error(ch)

@@ -1,0 +1,5 @@
+
+      (if (< (car L) (car (cdr L)))
+	(cons (car L) (bubbleup (cdr L)))
+	(cons (car (cdr L)) (bubbleup (cons (car L) (cdr (cdr L))))))
+	))
