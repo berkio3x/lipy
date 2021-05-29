@@ -73,7 +73,8 @@ class Tokenizer:
         self.source = source
         self.c = 0
         self.start = 0
-        self.operators = ('+' ,'-', '*', '/')
+        self.binary_operators = ('*', '/')
+        self.unary_operators = ('+' ,'-')
         self.tokens = []
     
     def error(self, ch):
@@ -146,8 +147,15 @@ class Tokenizer:
                 self.next()
             _token = self.source[self.start: self.c]
             self.tokens.append(_token)
-            
-        elif ch in self.operators:
+        
+        elif ch in self.unary_operators:
+            if ch == "-":
+                while self.peek() and isnum(self.peek()):
+                    self.next()
+            _token = self.source[self.start: self.c]
+            self.tokens.append(_token)
+
+        elif ch in self.binary_operators:
             self.tokens.append(ch)
         elif ch == ' ' or ch == '\n' or ch == '\t':
             pass
