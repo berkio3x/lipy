@@ -5,8 +5,8 @@ An interpreter for lisp/scheme dialect of programming.
 
 
 ### Links
-[Examples](https://github.com/berkio3x/lipy/tree/main/examples)    
-[Test suite](https://github.com/berkio3x/lipy/blob/main/test_lipy.py)
+[🥳 Examples](https://github.com/berkio3x/lipy/tree/main/examples)    
+[🐞 Test suite](https://github.com/berkio3x/lipy/blob/main/test_lipy.py)
 
 
 ### Dependencies
