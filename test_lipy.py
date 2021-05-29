@@ -2,7 +2,13 @@ from main import execute_program
 from utils import colors
 
 progs =[
-   
+
+    # Quote
+    #('''(cons (quote a) (quote (b c)))''',["a","b","c"]),
+    #("""(cons a""", "a"),
+    ('''(cons 1 nil)''', [1]),  
+    ('''(cons 1 1)''', [1, 1]),  
+    ('''(cons 2 (- 4 2))''', [2, 2]),  
     ('''(+ 100 200)''', 300),
     ('''(- 2 2)''',   0),
     ('''(* 3 2 2)''', 12),

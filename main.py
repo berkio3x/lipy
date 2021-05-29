@@ -110,7 +110,9 @@ class Tokenizer:
                 self.next()
             else:
                 self.tokens.append('>')
-            
+        elif ch == "'":
+            self.tokens.append("'")
+
         elif ch == "<":
             if self.peek() == '=':
                 self.tokens.append('<=')
@@ -228,6 +230,13 @@ def custom_print(x):
     print(x)
     return x
 
+def cons(x,y):
+    if y == "NIL":
+        y = []
+    else:
+        y = [eval_exp_tree(y)]
+    return [eval_exp_tree(x)] + y
+
 def std_env():
     env = Environment()
     env.update(vars(math))
@@ -249,7 +258,8 @@ def std_env():
         'min': min,
         'list-ref': lambda l, i: l[i],
         'list': lambda *x: list(x),
-        'cons': lambda x,y:[x] + list(y),
+        #'cons': lambda x,y:[x] + list(y),
+        'cons': cons,
         'car': lambda x: x[0],
         'cdr': lambda x: x[1:],
         'append': OP.add,
@@ -268,6 +278,7 @@ def std_env():
 def atom(token):
     if token == '#t': return True
     elif token == '#f': return False
+    elif token == 'nil': return "NIL"
     elif token[0] == '"' :return token[1:-1]
     try:
         return int(token)
@@ -303,7 +314,7 @@ def eval_exp_tree(exp, env=global_env):
             logger.debug('int evaluation')
             return exp 
         
-        case [Symbol('quote'), args]:
+        case [Symbol('quote'), args] | [Symbol("'"), args]:
             return args[0]
         
         case [Symbol('set!'), symbol, expression]:
