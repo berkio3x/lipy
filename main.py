@@ -18,6 +18,11 @@ parser.add_option("-e", "--showenv",
                   dest ="showenv" , 
                   default = False
                   )
+parser.add_option("-a", "--ast-only",
+                    dest = "ast_only",
+                    default = False
+                )
+
 (options, args) = parser.parse_args()
 
 logging.basicConfig(format='[Line: %(lineno)d] %(message)s \n',
@@ -347,6 +352,7 @@ def execute_program(source, file=True):
     parsed = parse(tokens)
     logger.debug('Parsed ast:')
     logger.debug(pformat(parsed))
+    if options.ast_only: return
     logger.debug('\n\n\nEvaluation steps\n\n\n')
     result = eval_exp_tree(parsed)
     return result
