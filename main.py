@@ -120,7 +120,17 @@ class Tokenizer:
                 self.next()
             else:
                 self.tokens.append('<')
-
+        elif ch == "#":
+            if self.peek() == "t" or self.peek() == "f":
+                self.next()
+            if self.peek() == " ":
+                _token = self.source[self.start:self.c]
+                self.tokens.append(_token)
+            else:
+                error("""
+                        Illegal characters after #,
+                        should be #t or #f """
+                    )
         elif ch == ";":
             while self.peek() and self.peek() != '\n':
                 self.next()
@@ -342,6 +352,22 @@ def eval_exp_tree(exp, env=global_env):
         case [Symbol('if'), test, result, alt]:
             logger.debug('<if condition evaluation>')
             logger.debug((test, result, alt))
+            
+            exp = (result if eval_exp_tree(test, env) else alt)
+            return eval_exp_tree(exp, env)
+        
+        case [Symbol('cond'), *args]:
+            logger.debug('<cond condition evaluation>')
+            logger.debug(*args)
+
+            for cond in args:
+                test, expression = cond
+
+                result = eval_exp_tree(test, env)
+                if result == True or test == "#t":
+                   return eval_exp_tree(expression, env)
+
+                
             
             exp = (result if eval_exp_tree(test, env) else alt)
             return eval_exp_tree(exp, env)
